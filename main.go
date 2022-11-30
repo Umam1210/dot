@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -19,6 +20,16 @@ func main() {
 	if errEnv != nil {
 		panic("Failed to load env file")
 	}
+
+	client := redis.NewClient(&redis.Options{
+		Addr:     "redis-11140.c295.ap-southeast-1-1.ec2.cloud.redislabs.com:11140",
+		Username: "umam",
+		Password: "Test@123",
+		DB:       0,
+	})
+
+	pong, err := client.Ping(client.Context()).Result()
+	fmt.Println(pong, err)
 
 	mysql.DatabaseInit()
 
